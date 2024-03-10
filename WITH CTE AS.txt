@@ -1,0 +1,16 @@
+WITH CTE AS
+(
+
+SELECT
+app_id,
+sum(CASE when event_type = 'click' THEN 1 ELSE 0 end) as click,
+sum(CASE when event_type = 'impression' THEN 1 ELSE 0 end) as imp
+
+FROM events
+WHERE EXTRACT(year from timestamp) = '2022'
+GROUP BY app_id
+)
+SELECT
+app_id,
+ROUND(100.0 * click/imp, 2)
+from CTE
